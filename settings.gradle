@@ -1,3 +1,1 @@
-rootProject.name = 'gdemo'
-include 'abframe-cache'
-
+rootProject.name = 'graduate2-service'
