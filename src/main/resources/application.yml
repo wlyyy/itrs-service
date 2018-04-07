@@ -1,0 +1,8 @@
+mybatis:
+    type-aliases-package: org.abomb4.itrs.domain
+    type-handlers-package: org.abomb4.itrs.mybatis
+    configuration:
+        map-underscore-to-camel-case: true
+        default-fetch-size: 100
+        default-statement-timeout: 30
+
