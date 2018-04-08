@@ -1,11 +1,11 @@
-package org.abomb4.itrs.spring;
+package org.wlyyy.itrs.spring;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 
-@SpringBootApplication(scanBasePackages = "org.abomb4.itrs")
+@SpringBootApplication(scanBasePackages = "org.wlyyy.itrs")
+@MapperScan(basePackages = "org.wlyyy.itrs.dao")
 public class ItrsBoot {
 
     public static void main(String[] args) {
