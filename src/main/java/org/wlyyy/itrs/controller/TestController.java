@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.wlyyy.common.domain.BaseRestResponse;
-import org.wlyyy.itrs.dao.UserMapper;
+import org.wlyyy.itrs.dao.UserRepository;
 import org.wlyyy.itrs.domain.PositionType;
 import org.wlyyy.itrs.domain.User;
 
@@ -24,7 +24,7 @@ public class TestController {
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(TestController.class);
 
     @Autowired
-    private UserMapper dao;
+    private UserRepository dao;
 
     @RequestMapping("positions")
     public BaseRestResponse<List<PositionType>> getJobs() {
@@ -101,8 +101,7 @@ public class TestController {
         jobs.add(type11);
         jobs.add(type12);
 
-        return new BaseRestResponse<List<PositionType>>(true, "Query success", jobs) {
-        };
+        return new BaseRestResponse<List<PositionType>>(true, "Query success", jobs);
     }
 
     @RequestMapping("test")

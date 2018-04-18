@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author wlyyy
  */
 @Mapper
-public interface UserMapper {
+public interface UserRepository {
 
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Long id);
