@@ -7,9 +7,9 @@ package org.wlyyy.itrs.dict;
  */
 public enum EnumDemandStatus implements IDictionary<Integer> {
 
-    NORMAL(1, "正常", "正常"),
-    FULL(2, "人数已满", "人数已满"),
-    DELEED(3, "已删除", "已删除"),
+    NORMAL(1, "normal", "正常"),
+    FULL(2, "full", "人数已满"),
+    DELEED(3, "deleted", "已删除"),
     ;
 
     private final Integer code;

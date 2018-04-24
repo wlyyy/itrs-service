@@ -15,8 +15,21 @@ public class BaseServicePageableResponse<T> {
     private final int pageSize;
     private final long total;
 
-    public BaseServicePageableResponse(boolean success, String message, List<T> datas, Throwable cause,
-                                       int pageNo, int pageSize, long total) {
+    public BaseServicePageableResponse(
+            boolean success, String message, List<T> datas,
+            int pageNo, int pageSize, long total) {
+        this(success, message, datas, pageNo, pageSize, total, null);
+    }
+
+    public BaseServicePageableResponse(
+            boolean success, String message, Throwable cause) {
+        this(success, message, null, 1, 0, 0, cause);
+    }
+
+    public BaseServicePageableResponse(
+            boolean success, String message, List<T> datas,
+            int pageNo, int pageSize, long total,
+            Throwable cause) {
         this.success = success;
         this.message = message;
         this.datas = datas;

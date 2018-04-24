@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.data.domain.Page;
 import org.wlyyy.itrs.domain.User;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,6 +18,7 @@ public interface UserRepository {
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Long id);
 
+    @SelectProvider(type = UserQueryProvider.class, method = "select")
     Page<User> findByCondition(UserQuery queryObject);
 
     @Insert("insert into user(user_name, email, password, salt, sex, department_id, real_name, gmt_create, gmt_modify) values (" +
@@ -28,6 +30,15 @@ public interface UserRepository {
     int updateById(User user);
 
     class UserQuery {
+        private Long id;
+        private String userName;
+        private String email;
+        private Long departmentId;
+        private String realName;
+        private Date gmtCreateStart;
+        private Date gmtCreateEnd;
+        private Date gmtModifyStart;
+        private Date gmtModifyEnd;
 
     }
 
@@ -76,5 +87,8 @@ public interface UserRepository {
 
             return builder.toString();
         }
+    }
+
+    class UserQueryProvider {
     }
 }

@@ -7,13 +7,11 @@ public class BaseServicePageableRequest<T> {
 
     private final int pageNo;
     private final int pageSize;
-    private final long total;
     private final T data;
 
-    public BaseServicePageableRequest(int pageNo, int pageSize, long total, T data) {
+    public BaseServicePageableRequest(int pageNo, int pageSize, T data) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
-        this.total = total;
         this.data = data;
     }
 
@@ -23,10 +21,6 @@ public class BaseServicePageableRequest<T> {
 
     public int getPageSize() {
         return pageSize;
-    }
-
-    public long getTotal() {
-        return total;
     }
 
     public T getData() {

@@ -1,0 +1,111 @@
+package org.wlyyy.itrs.domain;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * 用户登录信息
+ */
+public class UserAgent {
+    private String sessionKey;
+    private Long id;
+    private String userName;
+    private String email;
+    private Set<Role> roles;
+    private Integer sex;
+    private Long departmentId;
+    private String realName;
+    private java.util.Date loginTime;
+    private java.util.Date refreshTime;
+
+    /**
+     * 判断该用户是否属于某个角色
+     *
+     * @param role 角色
+     * @return 是否属于
+     */
+    public boolean haveRole(Role role) {
+        return roles.contains(role);
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Date getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(Date refreshTime) {
+        this.refreshTime = refreshTime;
+    }
+}
