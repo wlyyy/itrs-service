@@ -1,6 +1,7 @@
 package org.wlyyy.itrs.domain;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class User {
     private Long id;
@@ -93,5 +94,42 @@ public class User {
 
     public void setGmtModify(Date gmtModify) {
         this.gmtModify = gmtModify;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(userName, user.userName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(salt, user.salt) &&
+                Objects.equals(sex, user.sex) &&
+                Objects.equals(departmentId, user.departmentId) &&
+                Objects.equals(realName, user.realName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, userName, email, password, salt, sex, departmentId, realName);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", sex=" + sex +
+                ", departmentId=" + departmentId +
+                ", realName='" + realName + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModify=" + gmtModify +
+                '}';
     }
 }
