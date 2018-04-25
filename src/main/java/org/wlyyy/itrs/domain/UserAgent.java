@@ -1,7 +1,6 @@
 package org.wlyyy.itrs.domain;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -16,8 +15,9 @@ public class UserAgent {
     private Integer sex;
     private Long departmentId;
     private String realName;
-    private java.util.Date loginTime;
-    private java.util.Date refreshTime;
+    private String ip;
+    private LocalDateTime loginTime;
+    private LocalDateTime refreshTime;
 
     /**
      * 判断该用户是否属于某个角色
@@ -33,79 +33,99 @@ public class UserAgent {
         return sessionKey;
     }
 
-    public void setSessionKey(String sessionKey) {
+    public UserAgent setSessionKey(String sessionKey) {
         this.sessionKey = sessionKey;
+        return this;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public UserAgent setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
+    public UserAgent setUserName(String userName) {
+        this.userName = userName;
+        return this;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserAgent setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public UserAgent setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+        return this;
     }
 
     public Integer getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public UserAgent setSex(Integer sex) {
         this.sex = sex;
+        return this;
     }
 
     public Long getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(Long departmentId) {
+    public UserAgent setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+        return this;
     }
 
     public String getRealName() {
         return realName;
     }
 
-    public void setRealName(String realName) {
+    public UserAgent setRealName(String realName) {
         this.realName = realName;
+        return this;
     }
 
-    public Date getLoginTime() {
+    public String getIp() {
+        return ip;
+    }
+
+    public UserAgent setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+
+    public LocalDateTime getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Date loginTime) {
+    public UserAgent setLoginTime(LocalDateTime loginTime) {
         this.loginTime = loginTime;
+        return this;
     }
 
-    public Date getRefreshTime() {
+    public LocalDateTime getRefreshTime() {
         return refreshTime;
     }
 
-    public void setRefreshTime(Date refreshTime) {
+    public UserAgent setRefreshTime(LocalDateTime refreshTime) {
         this.refreshTime = refreshTime;
+        return this;
     }
 }
+

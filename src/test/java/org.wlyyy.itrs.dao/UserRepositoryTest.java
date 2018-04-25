@@ -1,17 +1,16 @@
 package org.wlyyy.itrs.dao;
 
 import org.junit.Test;
+import java.util.List;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.wlyyy.itrs.domain.User;
+import org.wlyyy.itrs.request.UserQuery;
 import org.wlyyy.itrs.spring.ItrsBoot;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ItrsBoot.class)
@@ -50,8 +49,8 @@ public class UserRepositoryTest {
 //                new PageRequest(0, 10)
 //        );
 
-        final User byCondition = dao.findByCondition(
-                new UserRepository.UserQuery()
+        final List<User>  byCondition = dao.findByCondition(
+                new UserQuery()
                         .setRealName(user.getRealName())
                         .setEmail(user.getEmail())
                         // .setUserName("'%' and 1=1 and '%'='")
@@ -60,6 +59,7 @@ public class UserRepositoryTest {
                 ,
                 new PageRequest(0, 10)
         );
+
 
         System.out.println(byCondition);
 

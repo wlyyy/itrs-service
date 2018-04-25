@@ -1,12 +1,12 @@
 package org.wlyyy.itrs.dao;
 
+import java.util.List;
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.wlyyy.common.utils.StringTemplateUtils.St;
 import org.wlyyy.itrs.domain.User;
+import org.wlyyy.itrs.request.UserQuery;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,11 +17,29 @@ import java.util.Objects;
 @Mapper
 public interface UserRepository {
 
-    @Select("select * from user where id = #{id}")
+    /**
+     * 根据id查询用户，不包含password
+     *
+     * @param id id
+     * @return 用户对象
+     */
+    @Select("select id, user_name, email, sex, salt, department_id, real_name, gmt_create, gmt_modify from user where id = #{id}")
     User findById(@Param("id") Long id);
 
+    /**
+     * 根据userName查询用户，包含password
+     *
+     * @param userName 用户名
+     * @return 用户对象`
+     */
+    @Select("select * from user where user_name = #{userName}")
+    User findFullByUserName(@Param("userName") String userName);
+
     @SelectProvider(type = UserQueryProvider.class, method = "select")
-    User findByCondition(@Param("user") UserQuery queryObject, Pageable page);
+    List<User> findByCondition(@Param("user") UserQuery queryObject, Pageable page);
+
+    @SelectProvider(type = UserQueryProvider.class, method = "count")
+    long countByCondition(@Param("user") UserQuery queryObject);
 
     /**
      * 新建用户，忽略id、gmtCreate、gmtModify字段
@@ -32,105 +50,9 @@ public interface UserRepository {
     @SelectKey(statement = "select last_insert_id()", keyProperty = "id", before = false, resultType = Long.class)
     void insert(User user);
 
-    // @Update("update user set user_name = #{userName}, password = #{password}, salt = #{salt}, sex = #{sex}, department_id = #{departmentId}, real_name = #{realName}, gmt_modify = now() where id = #{id}")
+    // @Update("update user put user_name = #{userName}, password = #{password}, salt = #{salt}, sex = #{sex}, department_id = #{departmentId}, real_name = #{realName}, gmt_modify = now() where id = #{id}")
     @UpdateProvider(type = UserUpdateByIdProvider.class, method = "myMethod")
     int updateById(User user);
-
-    /**
-     * 用户查询类
-     */
-    class UserQuery {
-        private Long id;
-        private String userName;
-        private String email;
-        private Long departmentId;
-        private String realName;
-        private Date gmtCreateStart;
-        private Date gmtCreateEnd;
-        private Date gmtModifyStart;
-        private Date gmtModifyEnd;
-
-        public Long getId() {
-            return id;
-        }
-
-        public UserQuery setId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public UserQuery setUserName(String userName) {
-            this.userName = userName;
-            return this;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public UserQuery setEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Long getDepartmentId() {
-            return departmentId;
-        }
-
-        public UserQuery setDepartmentId(Long departmentId) {
-            this.departmentId = departmentId;
-            return this;
-        }
-
-        public String getRealName() {
-            return realName;
-        }
-
-        public UserQuery setRealName(String realName) {
-            this.realName = realName;
-            return this;
-        }
-
-        public Date getGmtCreateStart() {
-            return gmtCreateStart;
-        }
-
-        public UserQuery setGmtCreateStart(Date gmtCreateStart) {
-            this.gmtCreateStart = gmtCreateStart;
-            return this;
-        }
-
-        public Date getGmtCreateEnd() {
-            return gmtCreateEnd;
-        }
-
-        public UserQuery setGmtCreateEnd(Date gmtCreateEnd) {
-            this.gmtCreateEnd = gmtCreateEnd;
-            return this;
-        }
-
-        public Date getGmtModifyStart() {
-            return gmtModifyStart;
-        }
-
-        public UserQuery setGmtModifyStart(Date gmtModifyStart) {
-            this.gmtModifyStart = gmtModifyStart;
-            return this;
-        }
-
-        public Date getGmtModifyEnd() {
-            return gmtModifyEnd;
-        }
-
-        public UserQuery setGmtModifyEnd(Date gmtModifyEnd) {
-            this.gmtModifyEnd = gmtModifyEnd;
-            return this;
-        }
-    }
 
     /**
      * Update动态SQL
@@ -157,7 +79,7 @@ public interface UserRepository {
         String getUpdate(User user) {
             Objects.requireNonNull(user.getId(), "Cannot update when id is null");
 
-            builder.append("update user set ");
+            builder.append("update user put ");
 
             tryAppend(user.getUserName(), "user_name = #{userName}");
             tryAppend(user.getEmail(), "email = #{email}");
@@ -179,11 +101,14 @@ public interface UserRepository {
     }
 
     /**
-     * 动态查询
+     * 动态查询。
      */
     class UserQueryProvider {
         public static String select(@Param("user") UserQuery user, Pageable page) {
             return new UserQueryProvider().getSelect(user, page);
+        }
+        public static String count(@Param("user") UserQuery user) {
+            return new UserQueryProvider().getCount(user);
         }
 
         static String DELIMITER = " and ";
@@ -201,15 +126,58 @@ public interface UserRepository {
             }
         }
 
+        /**
+         * 获取查询条件count sql
+         *
+         * @param user 用户查询对象
+         * @return sql语句
+         */
+        private String getCount(UserQuery user) {
+            if (user == null) {
+                return "select count(*) from user";
+            }
+
+            builder.append("select count(*) from user where ");
+
+            packageWhere(user);
+
+            // 不能全都是空
+            if (first) {
+                throw new IllegalArgumentException("One of query condition should be not null");
+            }
+
+            return builder.toString();
+        }
+
+        /**
+         * 获取查询条件sql
+         *
+         * @param user 用户查询对象
+         * @param page 分页对象
+         * @return sql语句
+         */
         private String getSelect(UserQuery user, Pageable page) {
             if (user == null) {
                 return St.r("select {} from user {}",
-                        "id, user_name, email, sex, department_id, real_name, gmt_create, gmt_modify",
+                        "id, user_name, email, sex, salt, department_id, real_name, gmt_create, gmt_modify",
                         getPage(page)
                 );
             }
             builder.append("select id, user_name, email, sex, department_id, real_name, gmt_create, gmt_modify from user where ");
 
+            packageWhere(user);
+
+            // 不能全都是空
+            if (first) {
+                throw new IllegalArgumentException("One of query condition should be not null");
+            }
+
+            builder.append(" ").append(getPage(page));
+
+            return builder.toString();
+        }
+
+        private void packageWhere(UserQuery user) {
             String userName = "concat('%', #{user.userName}, '%')";
             String realName = "concat('%', #{user.realName}, '%')";
 
@@ -222,15 +190,6 @@ public interface UserRepository {
             tryAppend(user.getGmtCreateEnd(), "gmt_create <= #{user.gmtCreateEnd}");
             tryAppend(user.getGmtModifyStart(), "gmt_modify >= #{user.gmtModifyStart}");
             tryAppend(user.getGmtModifyEnd(), "gmt_modify <= #{user.gmtModifyEnd}");
-
-            // 不能全都是空
-            if (first) {
-                throw new IllegalArgumentException("One of query condition should be not null");
-            }
-
-            builder.append(" ").append(getPage(page));
-
-            return builder.toString();
         }
 
         private String getPage(Pageable page) {

@@ -28,11 +28,16 @@ public class JvmSimpleKeyValueCacheImpl implements SimpleKeyValueCache {
     }
 
     @Override
-    public <T> void set(String key, T value, Class<T> clazz) {
+    public <T> void put(String key, T value, Class<T> clazz) {
         if (value == null) {
             cacheMap.put(key, null);
         } else {
             cacheMap.put(key, gson.toJson(value));
         }
+    }
+
+    @Override
+    public void remove(String key) {
+        cacheMap.remove(key);
     }
 }

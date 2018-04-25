@@ -5,9 +5,13 @@ package org.wlyyy.common.domain;
  */
 public class BaseServiceResponse<T> {
 
+    /** 执行结果。判断类响应应该使用data作为判断结果而不是这个 */
     private final boolean success;
+    /** 结果信息 */
     private final String message;
+    /** 结果数据 */
     private final T data;
+    /** 异常 */
     private final Throwable cause;
 
     public BaseServiceResponse(boolean success, String message, T data, Throwable cause) {

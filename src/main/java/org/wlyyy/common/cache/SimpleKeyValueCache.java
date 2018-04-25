@@ -9,5 +9,7 @@ public interface SimpleKeyValueCache {
 
     <T> T get(String key, Class<T> clazz);
 
-    <T> void set(String key, T value, Class<T> clazz);
+    <T> void put(String key, T value, Class<T> clazz);
+
+    void remove(String key);
 }
